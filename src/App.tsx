@@ -19,13 +19,7 @@ export function App() {
 
         <NoteCard />
         <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
+        
       </div> 
    </div> 
   )
