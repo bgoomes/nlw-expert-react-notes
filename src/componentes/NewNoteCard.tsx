@@ -1,7 +1,21 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
+import { ChangeEvent, useState } from 'react'
 
 export function NewNoteCard(){
+    const [sholdShowOnboarding, setSholdShowOnboarding] =  useState(true)
+
+    function handleStartEditor(){
+      setSholdShowOnboarding(false)
+    }
+
+    function handleContentChange(event: ChangeEvent<HTMLTextAreaElement>){
+      if(event.target.value === ''){
+        setSholdShowOnboarding(true)
+      }
+    }
+
+
     return(
         <Dialog.Root>
           <Dialog.Trigger className=' rounded-md text-left flex flex-col gap-3 bg-slate-700 p-5 space-y-3 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'>
@@ -19,9 +33,14 @@ export function NewNoteCard(){
                 <span className=' text-sm font-medium text-slate-200 '>
                 Adiconar nota
                 </span>
-                <p className=' text-sm leading-6 text-slate-400 '>
-                   Comece <button className='font-medium text-lime-400 hover:underline'>gravando</button> uma nota em áudio ou se preferir <button className='font-medium text-lime-400 hover:underline'>utilize apenas texto</button>
-                </p>
+                {sholdShowOnboarding ? (
+                  <p className=' text-sm leading-6 text-slate-400 '>
+                      Comece <button className='font-medium text-lime-400 hover:underline'>gravando</button> uma nota em áudio ou se preferir <button className='font-medium text-lime-400 hover:underline' onClick={handleStartEditor}>utilize apenas texto</button>
+                  </p>
+                ): (
+                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' onChange={handleContentChange}/>
+                )}
+                
             </div>
 
             <button type='button' className='w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500'>
