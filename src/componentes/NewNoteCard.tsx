@@ -1,18 +1,36 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 
-export function NewNoteCard(){
+import { toast } from 'sonner'
+
+interface NewNoteCardProps {
+  onNoteCreated: (content: string) => void
+}
+
+export function NewNoteCard({onNoteCreated}: NewNoteCardProps){
     const [sholdShowOnboarding, setSholdShowOnboarding] =  useState(true)
+    const [ content, setContent] = useState('')
 
     function handleStartEditor(){
       setSholdShowOnboarding(false)
     }
 
     function handleContentChange(event: ChangeEvent<HTMLTextAreaElement>){
+      setContent(event.target.value)
+
       if(event.target.value === ''){
         setSholdShowOnboarding(true)
       }
+    }
+
+    function handleSaveNote(event: FormEvent){
+      event.preventDefault()
+      onNoteCreated(content)
+      setSholdShowOnboarding(true)
+
+      toast.success('Nota criada com sucesso!')
+
     }
 
 
@@ -29,7 +47,8 @@ export function NewNoteCard(){
             <Dialog.Close className='absolute right-0 top-0 bg-slate-800 p-1.5 text-slate-400 hover:text-slate-100'>
               <X className='size-5'/>
             </Dialog.Close>
-            <div className='flex flex-1 flex-col gap-3 p-5'>
+            <form onSubmit={handleSaveNote} className='flex flex-1 flex-col'>
+              <div className='flex flex-1 flex-col gap-3 p-5'>
                 <span className=' text-sm font-medium text-slate-200 '>
                 Adiconar nota
                 </span>
@@ -41,11 +60,14 @@ export function NewNoteCard(){
                   <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' onChange={handleContentChange}/>
                 )}
                 
-            </div>
+              </div>
 
-            <button type='button' className='w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500'>
-              Salvar nota
-            </button>
+              <button type='submit' className='w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500'>
+                Salvar nota
+              </button>
+            </form>
+
+            
           </Dialog.Content>
         </Dialog.Portal>
         </Dialog.Root>

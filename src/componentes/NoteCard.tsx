@@ -7,7 +7,7 @@ import { X } from 'lucide-react'
 
 interface NoteCardProps{
   note: {
-    data: Date
+    date: Date
     content: string
   }
 }
@@ -17,7 +17,7 @@ export function NoteCard({note }: NoteCardProps){
       <Dialog.Root>
         <Dialog.Trigger className=' text-left flex flex-col rounded-md bg-slate-800 p-5 space-y-3 overflow-hidden relative  outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 '>
           <span className=' text-sm font-medium text-slate-200 '>
-             {formatDistanceToNow(note.data, {locale: ptBR, addSuffix: true})}
+             {formatDistanceToNow(note.date, {locale: ptBR, addSuffix: true})}
           </span>
           <p className=' text-sm leading-6 text-slate-400 '>
             {note.content}
@@ -34,7 +34,7 @@ export function NoteCard({note }: NoteCardProps){
             </Dialog.Close>
             <div className='flex flex-1 flex-col gap-3 p-5'>
                 <span className=' text-sm font-medium text-slate-200 '>
-                   {formatDistanceToNow(note.data, {locale: ptBR, addSuffix: true})}
+                   {formatDistanceToNow(note.date, {locale: ptBR, addSuffix: true})}
                 </span>
                 <p className=' text-sm leading-6 text-slate-400 '>
                   {note.content}
