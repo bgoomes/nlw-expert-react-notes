@@ -40,7 +40,37 @@ export function NewNoteCard({onNoteCreated}: NewNoteCardProps){
     }
 
     function handleStartRecording(){
+      const isSpeechRecognitionApiAvalible = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window
+
+      if(!isSpeechRecognitionApiAvalible){
+        alert('Infelizmente seu navegador não suporta a API de gravação!')
+        return
+      }
+
       setIsReconsrding(true)
+      setSholdShowOnboarding(false)
+
+      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition 
+
+      const speechRecognition = new SpeechRecognitionAPI()
+
+      speechRecognition.lang = 'pt-BR'
+      speechRecognition.continuou = true
+      speechRecognition.maxlternative = 1
+      speechRecognition.interinResults = true
+
+      speechRecognition.onresult = (event) => {
+        const transcription = Array.from(event.results).reduce((text, result) => {
+            return text.concat(result[0].transcript)
+        }, '')
+
+        setContent(transcription)
+      }
+
+      speechRecognition.error = (event) => {
+        console.error(event)
+      }
+      speechRecognition.start()
     }
 
     function handleStopRecording(){
@@ -79,7 +109,7 @@ export function NewNoteCard({onNoteCreated}: NewNoteCardProps){
                   {isRecording ?(
                     <button type='button' onClick={handleStopRecording} className='w-full flex items-center justify-center gap-2 bg-slate-900 py-4 text-center text-sm text-slate-300 outline-none font-medium hover:text-slate-100'>
                       <div className='size-3 rounded-full bg-red-500 animate-pulse' />
-                      Gravando ( Clique para iterromper)
+                      Gravando (Clique para iterromper)
                     </button>
                   ) : (
                     <button type='button' onClick={handleSaveNote} className='w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500'>
